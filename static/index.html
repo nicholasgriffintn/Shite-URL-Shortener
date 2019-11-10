@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <title>The Shite URL Shortener</title>
+</head>
+<body>
+  <section class="app_main_content">
+    <section class="page_header_wrapper">
+      <div class="container">
+        <div class="row">
+          <div class="page_header_left col-12">
+            <h1>
+              The 💩 URL Shortener
+            </h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+    body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: inline-block;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Open Sans';
+}
+
+html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+section.app_main_content {
+    height: 100%;
+    width: 100%;
+    display: inline-block;
+    background-color: #222;
+    color: #fff;
+    padding: 20vh 20px 20px;
+}
+
+.container {
+    max-width: 1080px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.page_header_wrapper h1 {
+    margin-bottom: 10px;
+    font-size: 3.1em;
+    line-height: 1.4;
+    font-weight: 700;
+    color: #fff;
+}
+
+.urlshtner_form #message {
+    width: 100%;
+    display: inline-block;
+    background: #055a27;
+    color: #f9f9f9;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 1rem;
+    border: 1px solid #eee;
+}
+
+.form-group {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+input.btn.btn-primary {
+    background: #0d2786;
+    -webkit-appearance: none;
+    color: #fff;
+    padding: 10px 25px;
+}
+
+.form-group label {
+    width: 100%;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.form-group input#url {
+    width: 100%;
+    display: inline-block;
+    padding: 1rem;
+    -webkit-appearance: none;
+    float: left;
+}
+</style>
+
+    <div class="container">
+      <div class="row urlshtner_form">
+        <div class="col">
+          <form action="https://4i0qujrpn4.execute-api.eu-west-1.amazonaws.com/dev/">
+            <div class="form-group">
+              <div class="form-group">
+                <label for="url">Enter the URL to shorten</label>
+                <input class="form-control fluid" name="url" type="url" id="url" autocomplete="off" required placeholder="Type the URL that you want to shorten here.">
+              </div>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Shorten link">
+
+            <div id="message" style="display:none;" class=""></div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  <script>
+    $('form').submit(function (event) {
+      event.preventDefault()
+      addMessage('...')
+      shortenLink(event.target.action, event.target.url.value)
+    })
+
+    function shortenLink (apiUrl, longUrl) {
+      $.ajax(apiUrl, {
+        type : 'POST', 
+        data: JSON.stringify({url: longUrl})})
+        .done(function (responseJSON) {
+          var shortUrl = window.location.protocol + '//' + window.location.host + '/' + responseJSON.path
+          addMessage(shortUrl)
+        })
+        .fail(function (data) {
+          if (data.status === 400) {
+            addMessage(data.responseJSON.message)
+          } else {
+            addMessage('an unexpected error occurred')
+          }
+        })
+    }
+
+    function addMessage (text) {
+      $('#message').text(text).show()
+    }
+  </script>
+</body>
+</html>
