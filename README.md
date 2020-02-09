@@ -1,4 +1,7 @@
 # Serverless URL Shortener
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/nicholasgriffintn/Shite-URL-Shortener.svg)](https://greenkeeper.io/)
+
 A lightweight URL shortener built with the Serverless Framework using AWS Lambda and S3. Each URL redirection is stored as an S3 object with the `Website-Redirect-Location` metadata key set to the forwarding web address. AWS Lambda is used to create an API to save these objects. The website is served from the same S3 bucket.
 ## Setup
 ### Install dependencies
